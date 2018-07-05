@@ -1,14 +1,19 @@
 import React, {Component} from 'react';
 import {Row, Col} from 'antd'
 import {Link} from 'react-router-dom'
-import CarouselImg from "./carousel_img";
-
+import Tloader from 'react-touch-loader'
 
 class MobileList extends Component {
     constructor() {
         super();
         this.state = {
-            news: []
+            news: [],
+            canRefreshResolve: 1,
+            listLen: 0,
+            hasMore: 0,
+            initializing: 1,
+            refreshedAt: Date.now(),
+            autoLoadMore:true
         }
     }
 
@@ -20,6 +25,45 @@ class MobileList extends Component {
                 this.setState({news: json})
             })
             .catch((ex) => console.log('parsing failed', ex))
+    }
+    loadMore(resolve) {
+        setTimeout(() => {
+            var l = this.state.listLen + 9;
+
+            this.setState({
+                listLen: l,
+                hasMore: l > 0 && l < 20
+            });
+            fetch('http://newsapi.gugujiankong.com/Handler.ashx?action=getnews&type=' + this.props.type + '&count=' + this.state.listLen, {
+                method: 'GET'
+            }).then(response => response.json())
+                .then((json) => {
+                    this.setState({news: json})
+                    resolve();
+                })
+                .catch((ex) => {console.log('parsing failed', ex)})
+
+        }, 2e3);
+    }
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({
+                listLen: 9,
+                hasMore: 1,
+                initializing: 2, // initialized
+            });
+        }, 2e3);
+    }
+    handleRefresh(resolve, reject){
+        alert('aaa')
+        fetch('http://newsapi.gugujiankong.com/Handler.ashx?action=getnews&type=yule&count=' + this.props.count, {
+            method: 'GET'
+        }).then(response => response.json())
+            .then((json) => {
+                this.setState({news: json})
+            })
+            .catch((ex) => {console.log('parsing failed', ex),reject()})
+        resolve();
     }
 
     render() {
@@ -45,12 +89,19 @@ class MobileList extends Component {
             })
             :
             '未加载任何新闻'
+        const {hasMore,initializing} = this.state;
 
         return (
             <div>
                 <Row>
                     <Col span={24}>
-                        {newsList}
+                        <Tloader className="main"
+                                 onLoadMore={(resolve) => this.loadMore(resolve)}
+                                 hasMore={hasMore}
+                                 autoLoadMore={this.state.autoLoadMore}
+                                 initializing={initializing}>
+                                {newsList}
+                        </Tloader>
                     </Col>
                 </Row>
             </div>

@@ -6,6 +6,8 @@ import PCNewsDetail from "./components/pc_news_detail";
 import MobileUserCenter from "./components/mobile_usercenter";
 import MobileIndex from "./components/mobile_index";
 import MobileNewsDetail from "./components/mobile_news_detail";
+import PCUserCenter from "./components/pc_usercenter";
+
 
 class App extends Component {
     render() {
@@ -16,6 +18,7 @@ class App extends Component {
                         <Switch>
                             <Route exact path='/' component={PCIndex}/>
                             <Route path='/details/:uniquekey' component={PCNewsDetail}/>
+                            <Route path='/usercenter' component={PCUserCenter}/>
                         </Switch>
                     </MediaQuery>
 
@@ -23,6 +26,7 @@ class App extends Component {
                         <Switch>
                             <Route exact path='/' component={MobileIndex}/>
                             <Route path='/details/:uniquekey' component={MobileNewsDetail}/>
+                            <Route path='/usercenter' component={MobileUserCenter}/>
                         </Switch>
                     </MediaQuery>
                 </div>

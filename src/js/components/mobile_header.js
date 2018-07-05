@@ -66,7 +66,9 @@ class MobileHeader extends Component {
 
         const userShow = this.state.haveLogin
             ?
-            <Icon type='inbox'></Icon>
+            <Link to={`/usercenter`}>
+                <Icon type='inbox'></Icon>
+            </Link>
             :
             <Icon type='setting' onClick={this.login.bind(this)}></Icon>
         return (

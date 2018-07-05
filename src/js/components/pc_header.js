@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Menu, Icon,Modal,Form,Input,Button,Tabs,message} from 'antd';
 import logo from '../../imgs/logo.png'
+import {Link} from 'react-router-dom'
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -78,7 +79,9 @@ class PCHeader extends Component{
             <Menu.Item key="mail">
                 <Button type="primary">钱包</Button>
                 &nbsp;&nbsp;
+                <Link to={`/usercenter`} target="_blank">
                     <Button type="dashed">个人中心</Button>
+                </Link>
                 &nbsp;&nbsp;
                 <Button type='ghost' onClick={this.logout.bind(this)}>退出</Button>
             </Menu.Item>
